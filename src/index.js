@@ -24,7 +24,7 @@ SOFTWARE.
 
 import spellInteger from './spelling/integer';
 import spellFloat from './spelling/float';
-import { isInteger, MAX_SAFE_VALUE } from './utils/helpers';
+import { getOrdinalSuffix, isInteger, MAX_SAFE_VALUE } from './utils/helpers';
 
 /**
  * Generalized spell number function
@@ -52,3 +52,27 @@ export const spellNumberInAz = input => {
 
   return spellFloat(input);
 };
+
+/**
+ * Returns number with ordinal suffix in Azerbaijani
+ * @param {number} number
+ * @param {'long' | 'short'} type - 'long' or 'short'
+ * @return {string} number with ordinal suffix
+ * @example
+ * getNumberWithSuffix(1); // returns "1-ci"
+ * getNumberWithSuffix(1, 'long'); // returns "birinci"
+ */
+export function getNumberWithSuffix(number, type = 'long') {
+  const value = spellNumberInAz(number);
+  let suffix = getOrdinalSuffix(value);
+
+  switch (type) {
+    case 'short': {
+      suffix = suffix.slice(-2);
+      return `${number}-${suffix}`;
+    }
+    default: {
+      return `${value}${suffix}`;
+    }
+  }
+}
